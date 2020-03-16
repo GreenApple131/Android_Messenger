@@ -1,10 +1,11 @@
-package com.example.dyplommessenger
+package com.example.dyplommessenger.messages
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.dyplommessenger.R
+import com.example.dyplommessenger.models.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -24,15 +25,17 @@ class NewMessageActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Select User"
 
-        val adapter = GroupAdapter<GroupieViewHolder>()
-
+//        val adapter = GroupAdapter<GroupieViewHolder>()
 //        adapter.add(UserItem())
 //        adapter.add(UserItem())
 //        adapter.add(UserItem())
-
-        recyclerview_newmessage.adapter = adapter
+//        recyclerview_newmessage.adapter = adapter
 
         fetchUsers()
+    }
+
+    companion object {
+        val USER_KEY = "USER_KEY"
     }
 
     private fun fetchUsers() {
@@ -47,6 +50,17 @@ class NewMessageActivity : AppCompatActivity() {
                     if (user != null) {
                         adapter.add(UserItem(user))
                     }
+                }
+
+                adapter.setOnItemClickListener { item, view ->
+                    val userItem = item as UserItem
+
+                    val intent = Intent(view.context, ChatLogActivity::class.java)
+//                    intent.putExtra(USER_KEY, userItem.user.username)
+                    intent.putExtra(USER_KEY, userItem.user)
+                    startActivity(intent)
+
+                    finish()
                 }
 
                 recyclerview_newmessage.adapter = adapter
