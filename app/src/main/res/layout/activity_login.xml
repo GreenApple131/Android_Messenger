@@ -28,7 +28,7 @@
         android:background="@drawable/rounded_edittext_register_login"
         android:ems="10"
         android:foregroundTint="#F8F5F5"
-        android:hint="Email or Username"
+        android:hint="Email"
         android:inputType="textPersonName"
         android:paddingLeft="16dp"
         app:layout_constraintBottom_toBottomOf="parent"

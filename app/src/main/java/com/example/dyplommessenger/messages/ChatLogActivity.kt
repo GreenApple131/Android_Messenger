@@ -49,7 +49,12 @@ class ChatLogActivity : AppCompatActivity() {
     }
 
     private fun listenForMessages() {
-        val ref = FirebaseDatabase.getInstance().getReference("/messages")
+        val id_from = FirebaseAuth.getInstance().uid
+        val id_to = toUser?.uid
+
+        if (id_from == null) return
+
+        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$id_from/$id_to")
 
         ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
@@ -96,14 +101,19 @@ class ChatLogActivity : AppCompatActivity() {
 
         if (id_from == null) return
 
-        val reference = FirebaseDatabase.getInstance().getReference("/messages").push()
+//        val reference = FirebaseDatabase.getInstance().getReference("/messages").push()
+        val reference = FirebaseDatabase.getInstance().getReference("/user-messages/$id_from/$id_to").push()
+        val toReference = FirebaseDatabase.getInstance().getReference("/user-messages/$id_to/$id_from").push()
 
         val chatMessage =
             ChatMessage(reference.key!!, text, id_from, id_to, System.currentTimeMillis())
         reference.setValue(chatMessage)
             .addOnSuccessListener {
                 Log.d(TAG, "Saved our chat message: ${reference.key}")
+                edittext_chat_log.text.clear()
+                recyclerview_chat_log.scrollToPosition(adapter.itemCount - 1)
             }
+        toReference.setValue(chatMessage)
     }
 
     class ChatFromItem(val text: String, val user: User) : Item<GroupieViewHolder>() {
