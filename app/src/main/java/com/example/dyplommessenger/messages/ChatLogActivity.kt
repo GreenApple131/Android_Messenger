@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.dyplommessenger.R
 import com.example.dyplommessenger.models.ChatMessage
 import com.example.dyplommessenger.models.User
+import com.example.dyplommessenger.views.ChatFromItem
+import com.example.dyplommessenger.views.ChatToItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -68,10 +70,10 @@ class ChatLogActivity : AppCompatActivity() {
                         adapter.add(ChatToItem(chatMessage.text, currentUser!!))
                     } else {
                         adapter.add(ChatFromItem(chatMessage.text, toUser!!))
-
                     }
-
                 }
+                recyclerview_chat_log.scrollToPosition(adapter.itemCount - 1)
+
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -120,35 +122,5 @@ class ChatLogActivity : AppCompatActivity() {
 
         val latestMessageToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$id_to/$id_from")
         latestMessageToRef.setValue(chatMessage)
-    }
-
-    class ChatFromItem(val text: String, val user: User) : Item<GroupieViewHolder>() {
-        override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-            viewHolder.itemView.textview_from_row.text = text
-
-            //load our user image into the star
-            val uri = user.profileImageUrl
-            var targetImageView = viewHolder.itemView.imageview_chat_from_row
-            Picasso.get().load(uri).into(targetImageView)
-        }
-
-        override fun getLayout(): Int {
-            return R.layout.chat_from_row
-        }
-    }
-
-    class ChatToItem(val text: String, val user: User) : Item<GroupieViewHolder>() {
-        override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-            viewHolder.itemView.textview_to_row.text = text
-
-            //load our user image into the star
-            val uri = user.profileImageUrl
-            var targetImageView = viewHolder.itemView.imageview_chat_to_row
-            Picasso.get().load(uri).into(targetImageView)
-        }
-
-        override fun getLayout(): Int {
-            return R.layout.chat_to_row
-        }
     }
 }
