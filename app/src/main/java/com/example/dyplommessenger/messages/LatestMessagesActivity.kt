@@ -1,30 +1,30 @@
 package com.example.dyplommessenger.messages
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.dyplommessenger.R
-import com.example.dyplommessenger.messages.NewMessageActivity.Companion.USER_KEY
+import com.example.dyplommessenger.end_to_end_AES.SignalUser
+import com.example.dyplommessenger.end_to_end_AES.SignalWrapper
 import com.example.dyplommessenger.models.ChatMessage
 import com.example.dyplommessenger.models.User
 import com.example.dyplommessenger.registerlogin.RegisterActivity
 import com.example.dyplommessenger.views.LatestMessageRow
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_latest_messages.*
-import kotlinx.android.synthetic.main.latest_message_row.view.*
-import java.util.*
-import kotlin.collections.HashMap
 
 class LatestMessagesActivity : AppCompatActivity() {
+
+    private val signalWrapper: SignalWrapper = SignalWrapper()
+    private var outputTextView: TextView? = null
 
     companion object {
         var currentUser: User? = null
@@ -54,9 +54,39 @@ class LatestMessagesActivity : AppCompatActivity() {
         fetchCurrentUser()
 
         verifyUserIsLoggedIn()
+
+        outputTextView = findViewById(R.id.content) as TextView
+
+        try {
+            startSignalPoc()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     val latestMessagesMap = HashMap<String, ChatMessage>()
+
+
+    @Throws(java.lang.Exception::class)
+    private fun startSignalPoc() {
+        val alice: SignalUser = signalWrapper.register("alice")
+        outputTextView!!.append("\nalice registered!")
+        val bob: SignalUser = signalWrapper.register("bob")
+        outputTextView!!.append("\nbob registered!")
+        signalWrapper.initSession(alice, bob)
+        val aliceSc = signalWrapper.createSessionCipher(alice, bob)
+        var ciphertext = signalWrapper.encrypt(aliceSc, "Hi Bob, this is Alice! How are you?")
+        outputTextView!!.append("Encrypted => ${ciphertext.serialize()}".trimIndent())
+        val bobSc = signalWrapper.createSessionCipher(bob, alice)
+        var plaintext = signalWrapper.decrypt(bobSc, ciphertext)
+        outputTextView!!.append("\nDecrypted => $plaintext")
+        signalWrapper.initSession(bob, alice)
+        ciphertext = signalWrapper.encrypt(bobSc, "BOB: Hi Alice, this is Bob! I'm fine!")
+        outputTextView!!.append("Encrypted => ${ciphertext.serialize()}".trimIndent())
+        plaintext = signalWrapper.decrypt(aliceSc, ciphertext)
+        outputTextView!!.append("\nDecrypted => $plaintext")
+    }
+
 
     private fun refreshRecyclerViewMessages() {
         adapter.clear()
