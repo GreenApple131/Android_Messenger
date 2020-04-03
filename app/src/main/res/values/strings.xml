@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Raven</string>
+
+    <string name="find_users">Find Users</string>
+
+    <string name="tooltip_find_user">Add Friend</string>
+    <string name="tooltip_register">Create Account</string>
+
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_password_2">Re-enter Password</string>
+    <string name="hint_password_current">Enter The Current password</string>
+    <string name="hint_password_new">Enter new password</string>
+    <string name="hint_password_new_2">Re-enter new password</string>
+    <string name="hint_status">Enter a new status</string>
+    <string name="hint_username">Enter a new username</string>
+
+    <string name="username">Username</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="delete_friend">Delete Friend</string>
+    <string name="cancel_request">Cancel Request</string>
+    <string name="respond">Respond</string>
+
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+    <string name="image">Image</string>
+
+    <string name="btn_login">Enter</string>
+    <string name="btn_forgot_password">Forgot your Password?</string>
+    <string name="btn_reset_password">Reset Password</string>
+
+    <string name="forgot_password_msg">We need your Email address to send password reset Email.</string>
+
+    <string name="login">Login</string>
+    <string name="lbl_forgot_password">Forgot Password?</string>
+    <string name="type_a_message">Type a message…</string>
+    <string name="logout">Logout</string>
+    <string name="are_you_sure">Are you sure ?</string>
+    <string name ="register_label"> REGISTER </string>
+    <string name ="email_label"> Email </string>
+    <string name ="password_label"> Password </string>
+    <string name ="repeat_password_label"> Repeat Password </string>
+    <string name ="enter_button"> Enter </string>
+    <string name="name_label">Name</string>
+</resources>

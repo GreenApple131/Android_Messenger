@@ -1,0 +1,98 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.space.ChatApp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application
+        android:name="com.example.space.ChatApp.offline.Cache"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Chat App"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.space.ChatApp.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+        <!--Service for notification service-->
+        <service
+            android:name="com.example.space.ChatApp.services.NotificationService"
+            android:enabled="true"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
+        <!--        <activity-->
+        <!--            android:name=".ui.activities.TabsActivity">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.MAIN" />-->
+        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--            </intent-filter>-->
+        <!--        </activity>-->
+
+
+        <activity
+            android:name="com.example.space.ChatApp.ui.activities.SplashActivity"
+            android:label="Chat App">
+<!--            android:theme="@style/AppTheme.NoActionBar.Splash">-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.example.space.ChatApp.ui.activities.ResetPasswordActivity"
+            android:parentActivityName="com.example.space.ChatApp.ui.activities.LoginActivity"
+            android:screenOrientation="fullSensor" />
+
+        <activity
+            android:name="com.example.space.ChatApp.ui.activities.LoginActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/TranslucentBackground" />
+
+        <activity
+            android:name="com.example.space.ChatApp.ui.activities.SignUpActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Translucent" />
+
+        <activity
+            android:name="com.example.space.ChatApp.ui.activities.TabsActivity"
+            android:screenOrientation="fullSensor" />
+
+        <activity
+            android:name="com.example.space.ChatApp.ui.activities.AllUsersActivity"
+            android:parentActivityName="com.example.space.ChatApp.ui.activities.TabsActivity"
+            android:screenOrientation="fullSensor" />
+
+        <activity
+            android:name="com.example.space.ChatApp.ui.activities.ChatActivity"
+            android:parentActivityName="com.example.space.ChatApp.ui.activities.TabsActivity"
+            android:screenOrientation="fullSensor" />
+
+    </application>
+</manifest>
